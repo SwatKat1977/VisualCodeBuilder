@@ -67,3 +67,16 @@ class NodeEditorWindow(QtWidgets.QWidget):
         text.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable)
         text.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable)
         text.setDefaultTextColor(QtGui.QColor.fromRgbF(1.0, 1.0, 1.0))
+
+        widget_1 = QtWidgets.QPushButton("Push me")
+        proxy_1 = self.graphics_scene.addWidget(widget_1)
+        proxy_1.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable)
+        proxy_1.setPos(0, 30)
+
+        widget_2 = QtWidgets.QTextEdit()
+        proxy_2 = self.graphics_scene.addWidget(widget_2)
+        proxy_2.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable)
+
+        line = self.graphics_scene.addLine(-200, -200, 400, -100, outline_pen)
+        line.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable)
+        line.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable)
