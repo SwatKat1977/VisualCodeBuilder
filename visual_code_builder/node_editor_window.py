@@ -18,6 +18,8 @@ You should have received a copy of the GNU General Public License
 along with this program.If not, see < https://www.gnu.org/licenses/>.
 """
 import typing
+from PySide6 import QtCore
+from PySide6 import QtGui
 from PySide6 import QtWidgets
 from node_editor_window_graphics_scene import NodeEditorWindowGraphicsScene
 
@@ -50,3 +52,18 @@ class NodeEditorWindow(QtWidgets.QWidget):
 
         self.setWindowTitle("Node Editor")
         self.show()
+
+        self.add_test_contents()
+
+    def add_test_contents(self):
+        green_brush = QtGui.QBrush(QtCore.Qt.GlobalColor.green)
+        outline_pen = QtGui.QPen(QtCore.Qt.GlobalColor.black)
+        outline_pen.setWidth(2)
+
+        rect = self.graphics_scene.addRect(-100, -100, 80, 100, outline_pen, green_brush)
+        rect.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable)
+
+        text = self.graphics_scene.addText("Movable tests string", QtGui.QFont("Ubuntu"))
+        text.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable)
+        text.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable)
+        text.setDefaultTextColor(QtGui.QColor.fromRgbF(1.0, 1.0, 1.0))
