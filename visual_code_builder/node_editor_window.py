@@ -19,6 +19,7 @@ along with this program.If not, see < https://www.gnu.org/licenses/>.
 """
 import typing
 from PySide6 import QtWidgets
+from node_editor_window_graphics_scene import NodeEditorWindowGraphicsScene
 
 
 class NodeEditorWindow(QtWidgets.QWidget):
@@ -36,11 +37,11 @@ class NodeEditorWindow(QtWidgets.QWidget):
         self.setGeometry(200, 200, 1024, 768)
 
         self.layout = QtWidgets.QVBoxLayout()
-        self.layout.setContentsMargins(100, 100, 100, 100)
+        self.layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.layout)
 
         # Create graphics scene
-        self.graphics_scene = QtWidgets.QGraphicsScene()
+        self.graphics_scene = NodeEditorWindowGraphicsScene()
 
         # Create graphics view
         self.view = QtWidgets.QGraphicsView(self)
