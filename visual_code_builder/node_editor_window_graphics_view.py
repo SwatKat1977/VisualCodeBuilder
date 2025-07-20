@@ -50,13 +50,12 @@ class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
         if event.button() == QtCore.Qt.MiddleButton:
             self._middle_mouse_button_press(event)
 
-            """
         elif event.button() == QtCore.Qt.LeftButton:
             self._left_mouse_button_press(event)
 
         elif event.button() == QtCore.Qt.RightButton:
             self._right_mouse_button_press(event)
-            """
+
         else:
             super().mousePressEvent(event)
 
@@ -68,13 +67,12 @@ class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
         if event.button() == QtCore.Qt.MiddleButton:
             self._middle_mouse_button_release(event)
 
-            """
         elif event.button() == QtCore.Qt.LeftButton:
             self._left_mouse_button_release(event)
 
         elif event.button() == QtCore.Qt.RightButton:
             self._right_mouse_button_release(event)
-            """
+
         else:
             super().mouseReleaseEvent(event)
 
@@ -95,6 +93,12 @@ class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
                                        event.modifiers())
         super().mousePressEvent(fake_event)
 
+    def _left_mouse_button_press(self, event):
+        super().mousePressEvent(event)
+
+    def _right_mouse_button_press(self, event):
+        super().mousePressEvent(event)
+
     def _middle_mouse_button_release(self, event):
         fake_event = QtGui.QMouseEvent(event.type(), event.localPos(),
                                  event.screenPos(), QtCore.Qt.LeftButton,
@@ -102,3 +106,9 @@ class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
                                  event.modifiers())
         super().mouseReleaseEvent(fake_event)
         self.setDragMode(QtWidgets.QGraphicsView.NoDrag)
+
+    def _left_mouse_button_release(self, event):
+        super().mouseReleaseEvent(event)
+
+    def _right_mouse_button_release(self, event):
+        super().mouseReleaseEvent(event)
