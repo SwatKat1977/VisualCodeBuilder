@@ -25,7 +25,21 @@ from node_editor_window_graphics_scene import NodeEditorWindowGraphicsScene
 
 
 class NodeEditorWindow(QtWidgets.QWidget):
+    """
+    A QWidget-based window that sets up a node editor environment using a
+    QGraphicsScene and QGraphicsView.
+
+    This window initializes a vertical layout containing a QGraphicsView, which
+    displays a custom QGraphicsScene for visual node editing. It is designed to
+    act as the main GUI component for a node-based editor.
+    """
+
     def __init__(self, parent=None):
+        """
+        Initialize the NodeEditorWindow.
+
+        :param parent: Optional QWidget parent. Defaults to None.
+        """
         super().__init__(parent)
 
         self.layout: typing.Optional[QtWidgets.QVBoxLayout] = None
@@ -35,6 +49,13 @@ class NodeEditorWindow(QtWidgets.QWidget):
         self.init()
 
     def init(self):
+        """
+        Set up the UI components for the node editor window.
+
+        This includes setting the window geometry, creating the layout,
+        initializing the QGraphicsScene and QGraphicsView, and adding them to
+        the layout.
+        """
         # x offset, y offset, width, height
         self.setGeometry(200, 200, 1024, 768)
 
