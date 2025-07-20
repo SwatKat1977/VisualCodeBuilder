@@ -68,8 +68,7 @@ class NodeEditorWindow(QtWidgets.QWidget):
         self.graphics_scene = NodeEditorWindowGraphicsScene()
 
         # Create graphics view
-        self.view = QtWidgets.QGraphicsView(self)
-        self.view.setScene(self.graphics_scene)
+        self.view = NodeEditorWindowGraphicsView(self.graphics_scene, self)
         self.layout.addWidget(self.view)
 
         self.setWindowTitle("Node Editor")

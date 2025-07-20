@@ -17,8 +17,31 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see < https://www.gnu.org/licenses/>.
 """
+from PySide6 import QtCore
+from PySide6 import QtGui
 from PySide6 import QtWidgets
 
 
 class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
-    ...
+
+    def __init__(self, graphics_scene, parent=None):
+        super().__init__(parent)
+        self.graphics_scene = graphics_scene
+
+        self.initialise()
+
+        self.setScene(self.graphics_scene)
+
+    def initialise(self):
+        # Set Anti-aliasing.
+        self.setRenderHints(QtGui.QPainter.Antialiasing |
+                            QtGui.QPainter.TextAntialiasing |
+                            QtGui.QPainter.TextAntialiasing |
+                            QtGui.QPainter.SmoothPixmapTransform)
+
+        # Force redraw on dragging to stop 'canvas tearing'.
+        self.setViewportUpdateMode(QtWidgets.QGraphicsView.FullViewportUpdate)
+
+        # Hide the scrollbars.
+        self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
