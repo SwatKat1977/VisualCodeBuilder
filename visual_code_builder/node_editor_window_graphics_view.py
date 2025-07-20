@@ -45,3 +45,60 @@ class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
         # Hide the scrollbars.
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+
+    def mousePressEvent(self, event):
+        if event.button() == QtCore.Qt.MiddleButton:
+            self._middle_mouse_button_press(event)
+
+            """
+        elif event.button() == QtCore.Qt.LeftButton:
+            self._left_mouse_button_press(event)
+
+        elif event.button() == QtCore.Qt.RightButton:
+            self._right_mouse_button_press(event)
+            """
+        else:
+            super().mousePressEvent(event)
+
+    def mouseReleaseEvent(self, event):
+        # Disabling invalid-name as this is a QT override method and cannot be
+        # changed.
+        # pylint: disable=invalid-name
+
+        if event.button() == QtCore.Qt.MiddleButton:
+            self._middle_mouse_button_release(event)
+
+            """
+        elif event.button() == QtCore.Qt.LeftButton:
+            self._left_mouse_button_release(event)
+
+        elif event.button() == QtCore.Qt.RightButton:
+            self._right_mouse_button_release(event)
+            """
+        else:
+            super().mouseReleaseEvent(event)
+
+    def _middle_mouse_button_press(self, event):
+        release_event = QtGui.QMouseEvent(
+            QtCore.QEvent.MouseButtonRelease,
+            event.localPos(), event.screenPos(),
+            QtCore.Qt.LeftButton, QtCore.Qt.NoButton, event.modifiers())
+        super().mouseReleaseEvent(release_event)
+
+        self.setDragMode(QtWidgets.QGraphicsView.ScrollHandDrag)
+
+        fake_event = QtGui.QMouseEvent(event.type(),
+                                       event.localPos(),
+                                       event.screenPos(),
+                                       QtCore.Qt.LeftButton,
+                                       event.buttons() | QtCore.Qt.LeftButton,
+                                       event.modifiers())
+        super().mousePressEvent(fake_event)
+
+    def _middle_mouse_button_release(self, event):
+        fake_event = QtGui.QMouseEvent(event.type(), event.localPos(),
+                                 event.screenPos(), QtCore.Qt.LeftButton,
+                                 event.buttons() | QtCore.Qt.LeftButton,
+                                 event.modifiers())
+        super().mouseReleaseEvent(fake_event)
+        self.setDragMode(QtWidgets.QGraphicsView.NoDrag)
