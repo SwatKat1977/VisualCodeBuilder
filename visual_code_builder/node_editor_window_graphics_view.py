@@ -32,6 +32,13 @@ class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
 
         self.setScene(self.graphics_scene)
 
+        self._zoom_clamped = True
+        self._zoom_factor = 1.25
+        self._current_zoom = 10
+        self._zoom_step = 1
+        self._zoom_min_range_clamp = 0
+        self._zoom_max_range_clamp = 10
+
     def initialise(self):
         # Set Anti-aliasing.
         self.setRenderHints(QtGui.QPainter.Antialiasing |
@@ -45,6 +52,9 @@ class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
         # Hide the scrollbars.
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+
+        # Force transform to anchor centre on mouse.
+        self.setTransformationAnchor(QtWidgets.QGraphicsView.AnchorUnderMouse)
 
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.MiddleButton:
@@ -60,10 +70,6 @@ class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
             super().mousePressEvent(event)
 
     def mouseReleaseEvent(self, event):
-        # Disabling invalid-name as this is a QT override method and cannot be
-        # changed.
-        # pylint: disable=invalid-name
-
         if event.button() == QtCore.Qt.MiddleButton:
             self._middle_mouse_button_release(event)
 
@@ -75,6 +81,34 @@ class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
 
         else:
             super().mouseReleaseEvent(event)
+
+    def wheelEvent(self, event):
+        """
+        Overrides the QGraphicsView mouse wheel event method to implement zoom
+        functionality.
+        """
+        if event.angleDelta().y() > 0:
+            zoom_factor = self._zoom_factor
+            self._current_zoom += self._zoom_step
+
+        # Calculate zoom factor (out)
+        else:
+            zoom_factor = 1 / self._zoom_factor
+            self._current_zoom -= self._zoom_step
+
+        # Clamp the zoom to within the min/max range.
+        clamped = False
+        if self._current_zoom < self._zoom_min_range_clamp:
+            self._current_zoom = self._zoom_min_range_clamp
+            clamped = True
+
+        if self._current_zoom > self._zoom_max_range_clamp:
+            self._current_zoom = self._zoom_max_range_clamp
+            clamped = True
+
+        # Set scene scale
+        if not clamped or self._zoom_clamped is False:
+            self.scale(zoom_factor, zoom_factor)
 
     def _middle_mouse_button_press(self, event):
         release_event = QtGui.QMouseEvent(
