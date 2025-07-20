@@ -100,10 +100,12 @@ class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
         super().mousePressEvent(event)
 
     def _middle_mouse_button_release(self, event):
-        fake_event = QtGui.QMouseEvent(event.type(), event.localPos(),
-                                 event.screenPos(), QtCore.Qt.LeftButton,
-                                 event.buttons() | QtCore.Qt.LeftButton,
-                                 event.modifiers())
+        fake_event = QtGui.QMouseEvent(event.type(),
+                                       event.localPos(),
+                                       event.screenPos(),
+                                       QtCore.Qt.LeftButton,
+                                       event.buttons() | QtCore.Qt.LeftButton,
+                                       event.modifiers())
         super().mouseReleaseEvent(fake_event)
         self.setDragMode(QtWidgets.QGraphicsView.NoDrag)
 
