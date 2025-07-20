@@ -41,17 +41,20 @@ class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
 
     def initialise(self):
         # Set Anti-aliasing.
-        self.setRenderHints(QtGui.QPainter.Antialiasing |
-                            QtGui.QPainter.TextAntialiasing |
-                            QtGui.QPainter.TextAntialiasing |
-                            QtGui.QPainter.SmoothPixmapTransform)
+        self.setRenderHints(QtGui.QPainter.RenderHint.Antialiasing |
+                            QtGui.QPainter.RenderHint.TextAntialiasing |
+                            QtGui.QPainter.RenderHint.TextAntialiasing |
+                            QtGui.QPainter.RenderHint.SmoothPixmapTransform)
 
         # Force redraw on dragging to stop 'canvas tearing'.
-        self.setViewportUpdateMode(QtWidgets.QGraphicsView.FullViewportUpdate)
+        self.setViewportUpdateMode(
+            QtWidgets.QGraphicsView.ViewportUpdateMode.FullViewportUpdate)
 
         # Hide the scrollbars.
-        self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.setHorizontalScrollBarPolicy(
+            QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.setVerticalScrollBarPolicy(
+            QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
         # Force transform to anchor centre on mouse.
         self.setTransformationAnchor(QtWidgets.QGraphicsView.AnchorUnderMouse)
