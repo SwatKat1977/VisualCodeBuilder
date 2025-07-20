@@ -76,6 +76,7 @@ class NodeEditorWindow(QtWidgets.QWidget):
         widget_2 = QtWidgets.QTextEdit()
         proxy_2 = self.graphics_scene.addWidget(widget_2)
         proxy_2.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable)
+        proxy_2.setPos(-400, -400)
 
         line = self.graphics_scene.addLine(-200, -200, 400, -100, outline_pen)
         line.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable)
