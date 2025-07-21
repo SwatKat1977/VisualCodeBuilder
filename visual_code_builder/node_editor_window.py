@@ -21,7 +21,7 @@ import typing
 from PySide6 import QtCore
 from PySide6 import QtGui
 from PySide6 import QtWidgets
-from node_editor_window_graphics_scene import NodeEditorWindowGraphicsScene
+from scene import Scene
 from node_editor_window_graphics_view import NodeEditorWindowGraphicsView
 
 
@@ -45,7 +45,8 @@ class NodeEditorWindow(QtWidgets.QWidget):
 
         self.layout: typing.Optional[QtWidgets.QVBoxLayout] = None
         self.view: typing.Optional[QtWidgets.QGraphicsView] = None
-        self.graphics_scene: typing.Optional[QtWidgets.QGraphicsScene] = None
+        self.scene: typing.Optional[Scene] = None
+        self.graphics_scene = None
 
         self.init()
 
@@ -65,7 +66,8 @@ class NodeEditorWindow(QtWidgets.QWidget):
         self.setLayout(self.layout)
 
         # Create graphics scene
-        self.graphics_scene = NodeEditorWindowGraphicsScene()
+        self.scene = Scene()
+        self.graphics_scene = self.scene.graphics_scene
 
         # Create graphics view
         self.view = NodeEditorWindowGraphicsView(self.graphics_scene, self)
