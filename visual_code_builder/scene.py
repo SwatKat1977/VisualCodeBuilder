@@ -18,5 +18,21 @@ You should have received a copy of the GNU General Public License
 along with this program.If not, see < https://www.gnu.org/licenses/>.
 """
 
+
 class Scene:
-    ...
+
+    def __init__(self):
+        self.nodes: list = []
+        self.connections: list = []
+
+    def add_node(self, node):
+        self.nodes.append(node)
+
+    def add_connection(self, connection):
+        self.connections.append(connection)
+
+    def remove_node(self, node):
+        self.nodes.remove(node)
+
+    def remove_connection(self, connection):
+        self.connections.remove(connection)
