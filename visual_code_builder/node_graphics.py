@@ -28,13 +28,11 @@ class NodeGraphics(QtWidgets.QGraphicsItem):
 
         self._title = title
 
-        self._title_colour = QtCore.Qt.white
-        self._title_font = QtGui.QFont("Ubuntu", 10)
-
         # Node settings
         self._width = 180
         self._height = 240
         self._title_height = 25
+        self._text_padding = 10.0
 
         self._edge_roundness = 10
 
@@ -44,6 +42,12 @@ class NodeGraphics(QtWidgets.QGraphicsItem):
 
         # Brush for the title
         self._brush_title = QtGui.QBrush(QtGui.QColor("#FF313131"))
+
+        # Node background brush
+        self._brush_background = QtGui.QBrush(QtGui.QColor("#E3212121"))
+
+        self._title_colour = QtCore.Qt.white
+        self._title_font = QtGui.QFont("Ubuntu", 10)
 
         self.initialise_title()
         self.title = title
@@ -59,6 +63,8 @@ class NodeGraphics(QtWidgets.QGraphicsItem):
         self.title_item = QtWidgets.QGraphicsTextItem(self)
         self.title_item.setDefaultTextColor(self._title_colour)
         self.title_item.setFont(self._title_font)
+        self.title_item.setPos(self._text_padding, 0)
+        self.title_item.setTextWidth(self._width - 2 * self._text_padding)
 
     @property
     def title(self):
@@ -99,6 +105,21 @@ class NodeGraphics(QtWidgets.QGraphicsItem):
         painter.setPen(QtCore.Qt.NoPen)
         painter.setBrush(self._brush_title)
         painter.drawPath(path_title.simplified())
+
+        # Paint the node body
+        path_body = QtGui.QPainterPath()
+        path_body.setFillRule(QtCore.Qt.WindingFill)
+        path_body.addRoundedRect(0, self._title_height, self._width,
+                                 self._height - self._title_height,
+                                 self._edge_roundness, self._edge_roundness)
+        path_body.addRect(0, self._title_height, self._edge_roundness,
+                          self._edge_roundness)
+        path_body.addRect(self._width - self._edge_roundness,
+                          self._title_height, self._edge_roundness,
+                          self._edge_roundness)
+        painter.setPen(QtCore.Qt.NoPen)
+        painter.setBrush(self._brush_background)
+        painter.drawPath(path_body.simplified())
 
         # Paint the node outline
         path_outline = QtGui.QPainterPath()
