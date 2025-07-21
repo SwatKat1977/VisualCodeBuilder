@@ -17,3 +17,94 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see < https://www.gnu.org/licenses/>.
 """
+from PySide6 import QtCore
+from PySide6 import QtGui
+from PySide6 import QtWidgets
+
+
+class NodeGraphics(QtWidgets.QGraphicsItem):
+    def __init__(self, node, title: str = "Node Graphics Item", parent=None):
+        super().__init__(parent)
+
+        self._title = title
+
+        self._title_colour = QtCore.Qt.white
+        self._title_font = QtGui.QFont("Ubuntu", 10)
+
+        # Node settings
+        self._width = 180
+        self._height = 240
+        self._title_height = 25
+
+        self._edge_roundness = 10
+
+        # Pens for drawing the node edge
+        self._pen_outline_unselected = QtGui.QPen(QtGui.QColor("#7F000000"))
+        self._pen_outline_selected = QtGui.QPen(QtGui.QColor("#FFFFA637"))
+
+        # Brush for the title
+        self._brush_title = QtGui.QBrush(QtGui.QColor("#FF313131"))
+
+        self.initialise_title()
+        self.title = title
+
+        self.initialise()
+
+    def initialise(self):
+        self.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable)
+        self.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable)
+
+    def initialise_title(self):
+        # Create title
+        self.title_item = QtWidgets.QGraphicsTextItem(self)
+        self.title_item.setDefaultTextColor(self._title_colour)
+        self.title_item.setFont(self._title_font)
+
+    @property
+    def title(self):
+        return self._title
+
+    @title.setter
+    def title(self, new_title):
+        self._title = new_title
+        self.title_item.setPlainText(self._title)
+
+    def boundingRect(self) -> QtCore.QRectF:
+        """
+        Implement QGraphicsItem boundingRect() to Define a bounding
+        rectangle
+        """
+        return QtCore.QRectF(
+            0,
+            0,
+            2 * self._edge_roundness + self._width,
+            2 * self._edge_roundness + self._height
+        ).normalized()
+
+    def paint(self, painter, _unused1, _unused2):
+        """
+        Override the paint method for a rounded rectangle `Node`
+        """
+
+        # Paint the node title
+        path_title: QtGui.QPainterPath = QtGui.QPainterPath()
+        path_title.setFillRule(QtCore.Qt.WindingFill)
+        path_title.addRoundedRect(0, 0, self._width, self._title_height,
+                                  self._edge_roundness, self._edge_roundness)
+        path_title.addRect(0, self._title_height - self._edge_roundness,
+                           self._edge_roundness, self._edge_roundness)
+        path_title.addRect(self._width - self._edge_roundness,
+                           self._title_height - self._edge_roundness,
+                           self._edge_roundness, self._edge_roundness)
+        painter.setPen(QtCore.Qt.NoPen)
+        painter.setBrush(self._brush_title)
+        painter.drawPath(path_title.simplified())
+
+        # Paint the node outline
+        path_outline = QtGui.QPainterPath()
+        path_outline.addRoundedRect(0, 0, self._width, self._height,
+                                    self._edge_roundness, self._edge_roundness)
+        painter.setPen(self._pen_outline_unselected if not self.isSelected()
+                       else self._pen_outline_selected)
+        painter.setBrush(QtCore.Qt.NoBrush)
+        painter.drawPath(path_outline.simplified())

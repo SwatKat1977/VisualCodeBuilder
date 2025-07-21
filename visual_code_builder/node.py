@@ -28,6 +28,7 @@ class Node:
         self.node_graphics = NodeGraphics(self, self.title)
 
         self.scene.add_node(self)
+        self.scene.graphics_scene.addItem(self.node_graphics)
 
         self.inputs: list = []
         self.outputs: list = []
