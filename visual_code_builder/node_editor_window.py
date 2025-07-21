@@ -22,6 +22,7 @@ from PySide6 import QtCore
 from PySide6 import QtGui
 from PySide6 import QtWidgets
 from scene import Scene
+from node import Node
 from node_editor_window_graphics_view import NodeEditorWindowGraphicsView
 
 
@@ -46,7 +47,6 @@ class NodeEditorWindow(QtWidgets.QWidget):
         self.layout: typing.Optional[QtWidgets.QVBoxLayout] = None
         self.view: typing.Optional[QtWidgets.QGraphicsView] = None
         self.scene: typing.Optional[Scene] = None
-        self.graphics_scene = None
 
         self.init()
 
@@ -67,16 +67,17 @@ class NodeEditorWindow(QtWidgets.QWidget):
 
         # Create graphics scene
         self.scene = Scene()
-        self.graphics_scene = self.scene.graphics_scene
+
+        node_1 = Node(self.scene, "Node #1")
 
         # Create graphics view
-        self.view = NodeEditorWindowGraphicsView(self.graphics_scene, self)
+        self.view = NodeEditorWindowGraphicsView(self.scene.graphics_scene, self)
         self.layout.addWidget(self.view)
 
         self.setWindowTitle("Node Editor")
         self.show()
 
-        self.add_test_contents()
+        # self.add_test_contents()
 
     def add_test_contents(self):
         green_brush = QtGui.QBrush(QtCore.Qt.GlobalColor.green)
