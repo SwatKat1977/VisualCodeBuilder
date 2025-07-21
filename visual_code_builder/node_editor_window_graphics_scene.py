@@ -24,11 +24,10 @@ from PySide6 import QtWidgets
 
 
 class NodeEditorWindowGraphicsScene(QtWidgets.QGraphicsScene):
-    def __init__(self, parent=None):
+    def __init__(self, scene, parent=None):
         super().__init__(parent)
 
-        self.scene_width: int = 64000
-        self.scene_height: int = 64000
+        self.scene = scene
         self.grid_size: int = 20
         self.grid_squares: int = 5
 
@@ -45,13 +44,11 @@ class NodeEditorWindowGraphicsScene(QtWidgets.QGraphicsScene):
         self.dark_grid_line_pen : QtGui.QPen = QtGui.QPen(self.grid_line_dark_colour)
         self.dark_grid_line_pen.setWidth(2)
 
-        # Set focus of the window to be right in the middle
-        self.setSceneRect(-self.scene_width // 2,
-                          -self.scene_height // 2,
-                          self.scene_width,
-                          self.scene_height)
-
         self.setBackgroundBrush(self.colour_background)
+
+    def set_scene_rectangle(self, width: int, height: int):
+        # Set focus of the window to be right in the middle
+        self.setSceneRect(-width // 2, -height // 2, width, height)
 
     def drawBackground(self, painter, rect):
         """ PyQt method that is called every time the view is drawn. """

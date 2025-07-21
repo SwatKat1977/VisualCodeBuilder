@@ -17,6 +17,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see < https://www.gnu.org/licenses/>.
 """
+from node_editor_window_graphics_scene import NodeEditorWindowGraphicsScene
 
 
 class Scene:
@@ -24,6 +25,17 @@ class Scene:
     def __init__(self):
         self.nodes: list = []
         self.connections: list = []
+        self.scene_width: int = 64000
+        self.scene_height: int = 64000
+
+        self.graphics_scene = None
+
+        self.initialise()
+
+    def initialise(self):
+        # Create graphics scene
+        self.graphics_scene = NodeEditorWindowGraphicsScene(self)
+        self.graphics_scene.set_scene_rectangle(self.scene_width, self.scene_height)
 
     def add_node(self, node):
         self.nodes.append(node)
