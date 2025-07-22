@@ -23,10 +23,10 @@ from PySide6 import QtWidgets
 
 
 class NodeGraphics(QtWidgets.QGraphicsItem):
-    def __init__(self, node, title: str = "Node Graphics Item", parent=None):
+    def __init__(self, node, parent=None):
         super().__init__(parent)
 
-        self._title = title
+        self._node = node
 
         # Node settings
         self._width = 180
@@ -50,7 +50,7 @@ class NodeGraphics(QtWidgets.QGraphicsItem):
         self._title_font = QtGui.QFont("Ubuntu", 10)
 
         self.initialise_title()
-        self.title = title
+        self.title = self._node.title
 
         self.initialise()
 

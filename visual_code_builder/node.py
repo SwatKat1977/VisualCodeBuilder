@@ -25,7 +25,7 @@ class Node:
         self.scene = scene
         self.title = title
 
-        self.node_graphics = NodeGraphics(self, self.title)
+        self.node_graphics = NodeGraphics(self)
 
         self.scene.add_node(self)
         self.scene.graphics_scene.addItem(self.node_graphics)
