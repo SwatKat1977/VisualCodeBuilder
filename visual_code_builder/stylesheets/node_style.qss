@@ -1,0 +1,8 @@
+NodeWidget {
+    background : transparent;
+}
+
+QLabel {
+    color : grey;
+
+}
