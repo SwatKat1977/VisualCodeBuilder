@@ -17,20 +17,27 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see < https://www.gnu.org/licenses/>.
 """
-from node_graphics import NodeGraphics
-from node_widget import NodeWidget
+from PySide6 import QtWidgets
 
 
-class Node:
-    def __init__(self, scene, title='DEFAULT'):
-        self.scene = scene
-        self.title = title
+class NodeWidget(QtWidgets.QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
 
-        self.contents = NodeWidget()
-        self.node_graphics = NodeGraphics(self)
+        self._label = None
+        self._layout = None
 
-        self.scene.add_node(self)
-        self.scene.graphics_scene.addItem(self.node_graphics)
+        self.initialise()
 
-        self.inputs: list = []
-        self.outputs: list = []
+    def initialise(self):
+        # Create vertical box layout.
+        self._layout = QtWidgets.QVBoxLayout()
+
+        # Set no 0 margins to remove border.
+        self._layout.setContentsMargins(0, 0, 0, 0)
+
+        self.setLayout(self._layout)
+
+        self._label = QtWidgets.QLabel("Test Widget")
+        self._layout.addWidget(self._label)
+        self._layout.addWidget(QtWidgets.QTextEdit("Hello world"))

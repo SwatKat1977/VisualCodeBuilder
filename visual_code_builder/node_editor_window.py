@@ -48,6 +48,9 @@ class NodeEditorWindow(QtWidgets.QWidget):
         self.view: typing.Optional[QtWidgets.QGraphicsView] = None
         self.scene: typing.Optional[Scene] = None
 
+        self._stylesheet_filename = "stylesheets/node_style.qss"
+        self._load_style_sheet(self._stylesheet_filename)
+
         self.init()
 
     def init(self):
@@ -105,3 +108,11 @@ class NodeEditorWindow(QtWidgets.QWidget):
         line = self.graphics_scene.addLine(-200, -200, 400, -100, outline_pen)
         line.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable)
         line.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable)
+
+    def _load_style_sheet(self, stylesheet_file: str):
+        print(f"Loading node stylesheet '{stylesheet_file}")
+        file: QtCore.QFile = QtCore.QFile(stylesheet_file)
+        file.open(QtCore.QFile.ReadOnly | QtCore.QFile.Text)
+        stylesheet = file.readAll()
+        QtWidgets.QApplication.instance().setStyleSheet(str(stylesheet,
+                                                            encoding="utf-8"))

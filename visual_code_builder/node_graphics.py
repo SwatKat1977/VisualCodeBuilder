@@ -23,10 +23,11 @@ from PySide6 import QtWidgets
 
 
 class NodeGraphics(QtWidgets.QGraphicsItem):
-    def __init__(self, node, title: str = "Node Graphics Item", parent=None):
+    def __init__(self, node, parent=None):
         super().__init__(parent)
 
-        self._title = title
+        self._node = node
+        self._contents = self._node.contents
 
         # Node settings
         self._width = 180
@@ -50,7 +51,12 @@ class NodeGraphics(QtWidgets.QGraphicsItem):
         self._title_font = QtGui.QFont("Ubuntu", 10)
 
         self.initialise_title()
-        self.title = title
+        self.title = self._node.title
+
+        # Initialise sockets
+
+        # Initialise contents
+        self._build_contents()
 
         self.initialise()
 
@@ -129,3 +135,12 @@ class NodeGraphics(QtWidgets.QGraphicsItem):
                        else self._pen_outline_selected)
         painter.setBrush(QtCore.Qt.NoBrush)
         painter.drawPath(path_outline.simplified())
+
+    def _build_contents(self):
+        self._contents_widget = QtWidgets.QGraphicsProxyWidget(self)
+        self._contents.setGeometry(self._edge_roundness,
+                                   self._title_height + self._edge_roundness,
+                                   self._width - 2 * self._edge_roundness,
+                                   self._height - 2 * self._edge_roundness
+                                               - self._title_height)
+        self._contents_widget.setWidget(self._contents)
