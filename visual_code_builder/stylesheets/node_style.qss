@@ -3,6 +3,5 @@ NodeWidget {
 }
 
 QLabel {
-    color : grey;
-
+    color : #a0a6e0;
 }
