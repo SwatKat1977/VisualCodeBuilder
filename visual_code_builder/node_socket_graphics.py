@@ -17,3 +17,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see < https://www.gnu.org/licenses/>.
 """
+from PySide6 import QtWidgets
+
+
+class NodeSocketGraphics(QtWidgets.QGraphicsItem):
+    def __init__(self, parent=None):
+        super().__init__(parent)

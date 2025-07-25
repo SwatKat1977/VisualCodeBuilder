@@ -54,6 +54,7 @@ class NodeGraphics(QtWidgets.QGraphicsItem):
         self.title = self._node.title
 
         # Initialise sockets
+        self.initialise_sockets()
 
         # Initialise contents
         self._build_contents()
@@ -71,6 +72,9 @@ class NodeGraphics(QtWidgets.QGraphicsItem):
         self.title_item.setFont(self._title_font)
         self.title_item.setPos(self._text_padding, 0)
         self.title_item.setTextWidth(self._width - 2 * self._text_padding)
+
+    def initialise_sockets(self):
+        pass
 
     @property
     def title(self):

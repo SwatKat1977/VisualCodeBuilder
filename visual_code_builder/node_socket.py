@@ -17,6 +17,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see < https://www.gnu.org/licenses/>.
 """
+from node_socket_graphics import NodeSocketGraphics
+
 
 class NodeSocket:
-    pass
+    def __init__(self):
+        self.socket_graphics = NodeSocketGraphics()

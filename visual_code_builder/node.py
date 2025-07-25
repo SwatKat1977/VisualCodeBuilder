@@ -22,7 +22,7 @@ from node_widget import NodeWidget
 
 
 class Node:
-    def __init__(self, scene, title='DEFAULT'):
+    def __init__(self, scene, title='DEFAULT', inputs=None, outputs=None):
         self.scene = scene
         self.title = title
 
@@ -32,5 +32,5 @@ class Node:
         self.scene.add_node(self)
         self.scene.graphics_scene.addItem(self.node_graphics)
 
-        self.inputs: list = []
-        self.outputs: list = []
+        self.inputs: list = [] if inputs is None else inputs
+        self.outputs: list = [] if outputs is None else outputs
