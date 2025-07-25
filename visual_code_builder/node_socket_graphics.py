@@ -23,7 +23,21 @@ from PySide6 import QtWidgets
 
 
 class NodeSocketGraphics(QtWidgets.QGraphicsItem):
+    """
+    A graphical representation of a node socket within a node-based UI.
+
+    This class inherits from QGraphicsItem and provides custom painting
+    for a circular socket used in node editors. It defines its own
+    radius, background color, outline color, and stroke width.
+    """
+
     def __init__(self, parent=None):
+        """
+        Initialize the NodeSocketGraphics item.
+
+        Args:
+            parent (QGraphicsItem, optional): The parent graphics item.
+        """
         super().__init__(parent)
 
         self._radius = 6.0
@@ -37,10 +51,16 @@ class NodeSocketGraphics(QtWidgets.QGraphicsItem):
 
     def paint(self, painter, style_options, widget=None):
         # pylint: disable=unused-argument
-        """
-        Override QGraphicsItem's paint method to draw the socket.
-        """
 
+        """
+        Override QGraphicsItem's paint method to paint the circular socket on
+        the scene.
+
+        Args:
+            painter (QPainter): The painter used to draw the item.
+            style_options (QStyleOptionGraphicsItem): Style options for the item.
+            widget (QWidget, optional): Optional widget being painted on.
+        """
         # Paint the circle
         painter.setBrush(self._brush)
         painter.setPen(self._pen)
@@ -51,8 +71,14 @@ class NodeSocketGraphics(QtWidgets.QGraphicsItem):
 
     def boundingRect(self):
         """
-        Override QGraphicsItem's boundingRect method to determine the bounding
-        box for the graphics item """
+        Override QGraphicsItem's boundingRect method to return the bounding
+        rectangle of the socket.
+
+        This defines the clickable and repaintable area of the item.
+
+        Returns:
+            QRectF: The bounding rectangle that surrounds the socket.
+        """
         return QtCore.QRectF(
             -self._radius - self._outline_width,
             -self._radius - self._outline_width,
