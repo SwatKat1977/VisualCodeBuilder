@@ -18,6 +18,7 @@ You should have received a copy of the GNU General Public License
 along with this program.If not, see < https://www.gnu.org/licenses/>.
 """
 from node_graphics import NodeGraphics
+from node_socket import NodeSocket
 from node_widget import NodeWidget
 
 
@@ -32,5 +33,15 @@ class Node:
         self.scene.add_node(self)
         self.scene.graphics_scene.addItem(self.node_graphics)
 
-        self.inputs: list = [] if inputs is None else inputs
-        self.outputs: list = [] if outputs is None else outputs
+        self._inputs: list = []
+        self._outputs: list = []
+
+        if inputs is not None:
+            for socket in inputs:
+                new_socket = NodeSocket(parent_node=self)
+                self._inputs.append(new_socket)
+
+        if outputs is not None:
+            for socket in outputs:
+                new_socket = NodeSocket(parent_node=self)
+                self._outputs.append(new_socket)

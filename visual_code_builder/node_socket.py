@@ -17,9 +17,25 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see < https://www.gnu.org/licenses/>.
 """
+from enum import Enum
 from node_socket_graphics import NodeSocketGraphics
 
 
+class SocketPosition(Enum):
+    """ Socket start position enumeration """
+
+    LEFT_TOP = 1
+    LEFT_BOTTOM = 2
+    RIGHT_TOP = 3
+    RIGHT_BOTTOM = 4
+
+
 class NodeSocket:
-    def __init__(self):
-        self.socket_graphics = NodeSocketGraphics()
+    def __init__(self, parent_node,
+                 position_index=0,
+                 position: SocketPosition = SocketPosition.LEFT_TOP):
+        self._parent_node = parent_node
+        self._position_index = position_index
+        self._position = SocketPosition.LEFT_TOP
+
+        self.socket_graphics = NodeSocketGraphics(self._parent_node.node_graphics)

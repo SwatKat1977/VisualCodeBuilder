@@ -72,9 +72,10 @@ class NodeEditorWindow(QtWidgets.QWidget):
         # Create graphics scene
         self.scene = Scene()
 
-        node_1 = Node(self.scene, "Node #1",
-                      inputs=[NodeSocket(), NodeSocket(), NodeSocket()],
-                      outputs=[NodeSocket()])
+        node_1 = Node(self.scene,
+                      "Node #1",
+                      inputs=[1, 1, 1],
+                      outputs=[1])
 
         # Create graphics view
         self.view = NodeEditorWindowGraphicsView(self.scene.graphics_scene, self)
