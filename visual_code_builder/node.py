@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with this program.If not, see < https://www.gnu.org/licenses/>.
 """
 from node_graphics import NodeGraphics
-from node_socket import NodeSocket
+from node_socket import NodeSocket, SocketPosition
 from node_widget import NodeWidget
 
 
@@ -37,11 +37,18 @@ class Node:
         self._outputs: list = []
 
         if inputs is not None:
+            input_idx = 0
             for socket in inputs:
-                new_socket = NodeSocket(parent_node=self)
+                new_socket = NodeSocket(parent_node=self,
+                                        position_index=input_idx,
+                                        position=SocketPosition.LEFT_TOP)
+                input_idx += 1
                 self._inputs.append(new_socket)
 
         if outputs is not None:
+            output_idx = 0
             for socket in outputs:
-                new_socket = NodeSocket(parent_node=self)
+                new_socket = NodeSocket(parent_node=self,
+                                        position_index=output_idx,
+                                        position=SocketPosition.RIGHT_TOP)
                 self._outputs.append(new_socket)
