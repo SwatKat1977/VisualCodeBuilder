@@ -24,6 +24,7 @@ from PySide6 import QtWidgets
 from scene import Scene
 from node import Node
 from node_editor_window_graphics_view import NodeEditorWindowGraphicsView
+from node_socket import NodeSocket
 
 
 class NodeEditorWindow(QtWidgets.QWidget):
@@ -71,7 +72,10 @@ class NodeEditorWindow(QtWidgets.QWidget):
         # Create graphics scene
         self.scene = Scene()
 
-        node_1 = Node(self.scene, "Node #1")
+        node_1 = Node(self.scene,
+                      "Node #1",
+                      inputs=[1, 1, 1],
+                      outputs=[1])
 
         # Create graphics view
         self.view = NodeEditorWindowGraphicsView(self.scene.graphics_scene, self)

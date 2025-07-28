@@ -30,12 +30,12 @@ class NodeGraphics(QtWidgets.QGraphicsItem):
         self._contents = self._node.contents
 
         # Node settings
-        self._width = 180
-        self._height = 240
-        self._title_height = 25
-        self._text_padding = 10.0
+        self.width = 180
+        self.height = 240
+        self.title_height = 25
+        self.text_padding = 10.0
 
-        self._edge_roundness = 10
+        self.edge_roundness = 10
 
         # Pens for drawing the node edge
         self._pen_outline_unselected = QtGui.QPen(QtGui.QColor("#7F000000"))
@@ -54,6 +54,7 @@ class NodeGraphics(QtWidgets.QGraphicsItem):
         self.title = self._node.title
 
         # Initialise sockets
+        self.initialise_sockets()
 
         # Initialise contents
         self._build_contents()
@@ -69,8 +70,11 @@ class NodeGraphics(QtWidgets.QGraphicsItem):
         self.title_item = QtWidgets.QGraphicsTextItem(self)
         self.title_item.setDefaultTextColor(self._title_colour)
         self.title_item.setFont(self._title_font)
-        self.title_item.setPos(self._text_padding, 0)
-        self.title_item.setTextWidth(self._width - 2 * self._text_padding)
+        self.title_item.setPos(self.text_padding, 0)
+        self.title_item.setTextWidth(self.width - 2 * self.text_padding)
+
+    def initialise_sockets(self):
+        pass
 
     @property
     def title(self):
@@ -89,8 +93,8 @@ class NodeGraphics(QtWidgets.QGraphicsItem):
         return QtCore.QRectF(
             0,
             0,
-            2 * self._edge_roundness + self._width,
-            2 * self._edge_roundness + self._height
+            2 * self.edge_roundness + self.width,
+            2 * self.edge_roundness + self.height
         ).normalized()
 
     def paint(self, painter, _unused1, _unused2):
@@ -101,13 +105,13 @@ class NodeGraphics(QtWidgets.QGraphicsItem):
         # Paint the node title
         path_title: QtGui.QPainterPath = QtGui.QPainterPath()
         path_title.setFillRule(QtCore.Qt.WindingFill)
-        path_title.addRoundedRect(0, 0, self._width, self._title_height,
-                                  self._edge_roundness, self._edge_roundness)
-        path_title.addRect(0, self._title_height - self._edge_roundness,
-                           self._edge_roundness, self._edge_roundness)
-        path_title.addRect(self._width - self._edge_roundness,
-                           self._title_height - self._edge_roundness,
-                           self._edge_roundness, self._edge_roundness)
+        path_title.addRoundedRect(0, 0, self.width, self.title_height,
+                                  self.edge_roundness, self.edge_roundness)
+        path_title.addRect(0, self.title_height - self.edge_roundness,
+                           self.edge_roundness, self.edge_roundness)
+        path_title.addRect(self.width - self.edge_roundness,
+                           self.title_height - self.edge_roundness,
+                           self.edge_roundness, self.edge_roundness)
         painter.setPen(QtCore.Qt.NoPen)
         painter.setBrush(self._brush_title)
         painter.drawPath(path_title.simplified())
@@ -115,22 +119,22 @@ class NodeGraphics(QtWidgets.QGraphicsItem):
         # Paint the node body
         path_body = QtGui.QPainterPath()
         path_body.setFillRule(QtCore.Qt.WindingFill)
-        path_body.addRoundedRect(0, self._title_height, self._width,
-                                 self._height - self._title_height,
-                                 self._edge_roundness, self._edge_roundness)
-        path_body.addRect(0, self._title_height, self._edge_roundness,
-                          self._edge_roundness)
-        path_body.addRect(self._width - self._edge_roundness,
-                          self._title_height, self._edge_roundness,
-                          self._edge_roundness)
+        path_body.addRoundedRect(0, self.title_height, self.width,
+                                 self.height - self.title_height,
+                                 self.edge_roundness, self.edge_roundness)
+        path_body.addRect(0, self.title_height, self.edge_roundness,
+                          self.edge_roundness)
+        path_body.addRect(self.width - self.edge_roundness,
+                          self.title_height, self.edge_roundness,
+                          self.edge_roundness)
         painter.setPen(QtCore.Qt.NoPen)
         painter.setBrush(self._brush_background)
         painter.drawPath(path_body.simplified())
 
         # Paint the node outline
         path_outline = QtGui.QPainterPath()
-        path_outline.addRoundedRect(0, 0, self._width, self._height,
-                                    self._edge_roundness, self._edge_roundness)
+        path_outline.addRoundedRect(0, 0, self.width, self.height,
+                                    self.edge_roundness, self.edge_roundness)
         painter.setPen(self._pen_outline_unselected if not self.isSelected()
                        else self._pen_outline_selected)
         painter.setBrush(QtCore.Qt.NoBrush)
@@ -138,9 +142,9 @@ class NodeGraphics(QtWidgets.QGraphicsItem):
 
     def _build_contents(self):
         self._contents_widget = QtWidgets.QGraphicsProxyWidget(self)
-        self._contents.setGeometry(self._edge_roundness,
-                                   self._title_height + self._edge_roundness,
-                                   self._width - 2 * self._edge_roundness,
-                                   self._height - 2 * self._edge_roundness
-                                               - self._title_height)
+        self._contents.setGeometry(self.edge_roundness,
+                                   self.title_height + self.edge_roundness,
+                                   self.width - 2 * self.edge_roundness,
+                                   self.height - 2 * self.edge_roundness
+                                               - self.title_height)
         self._contents_widget.setWidget(self._contents)

@@ -18,11 +18,12 @@ You should have received a copy of the GNU General Public License
 along with this program.If not, see < https://www.gnu.org/licenses/>.
 """
 from node_graphics import NodeGraphics
+from node_socket import NodeSocket, SocketPosition
 from node_widget import NodeWidget
 
 
 class Node:
-    def __init__(self, scene, title='DEFAULT'):
+    def __init__(self, scene, title='DEFAULT', inputs=None, outputs=None):
         self.scene = scene
         self.title = title
 
@@ -32,5 +33,47 @@ class Node:
         self.scene.add_node(self)
         self.scene.graphics_scene.addItem(self.node_graphics)
 
-        self.inputs: list = []
-        self.outputs: list = []
+        self._socket_spacing = 30
+
+        self._inputs: list = []
+        self._outputs: list = []
+
+        if inputs is not None:
+            input_idx = 0
+            for socket in inputs:
+                new_socket = NodeSocket(parent_node=self,
+                                        position_index=input_idx,
+                                        position=SocketPosition.LEFT_TOP)
+                input_idx += 1
+                self._inputs.append(new_socket)
+
+        if outputs is not None:
+            output_idx = 0
+            for socket in outputs:
+                new_socket = NodeSocket(parent_node=self,
+                                        position_index=output_idx,
+                                        position=SocketPosition.RIGHT_TOP)
+                self._outputs.append(new_socket)
+
+    def calculate_socket_position(self, index : int, position : SocketPosition):
+        """
+        Calculate and return the X,Y position for a socket.
+        """
+
+        x_pos = 0 if position in (SocketPosition.LEFT_TOP,
+                                  SocketPosition.LEFT_BOTTOM) else \
+            self.node_graphics.width
+
+        if position in (SocketPosition.LEFT_BOTTOM, SocketPosition.RIGHT_BOTTOM):
+            y_pos = (self.node_graphics.height -
+                     self.node_graphics.edge_roundness -
+                     self.node_graphics.text_padding -
+                     index * self._socket_spacing)
+
+        else:
+            y_pos = (self.node_graphics.title_height +
+                     self.node_graphics.text_padding +
+                     self.node_graphics.edge_roundness + index *
+                     self._socket_spacing)
+
+        return x_pos, y_pos
