@@ -33,6 +33,8 @@ class Node:
         self.scene.add_node(self)
         self.scene.graphics_scene.addItem(self.node_graphics)
 
+        self._socket_spacing = 30
+
         self._inputs: list = []
         self._outputs: list = []
 
@@ -52,3 +54,26 @@ class Node:
                                         position_index=output_idx,
                                         position=SocketPosition.RIGHT_TOP)
                 self._outputs.append(new_socket)
+
+    def calculate_socket_position(self, index : int, position : SocketPosition):
+        """
+        Calculate and return the X,Y position for a socket.
+        """
+
+        x_pos = 0 if position in (SocketPosition.LEFT_TOP,
+                                  SocketPosition.LEFT_BOTTOM) else \
+            self.node_graphics.width
+
+        if position in (SocketPosition.LEFT_BOTTOM, SocketPosition.RIGHT_BOTTOM):
+            y_pos = (self.node_graphics.height -
+                     self.node_graphics.edge_roundness -
+                     self.node_graphics.text_padding -
+                     index * self._socket_spacing)
+
+        else:
+            y_pos = (self.node_graphics.title_height +
+                     self.node_graphics.text_padding +
+                     self.node_graphics.edge_roundness + index *
+                     self._socket_spacing)
+
+        return x_pos, y_pos

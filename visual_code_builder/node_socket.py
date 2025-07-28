@@ -39,3 +39,7 @@ class NodeSocket:
         self._position = SocketPosition.LEFT_TOP
 
         self.socket_graphics = NodeSocketGraphics(self._parent_node.node_graphics)
+
+        socket_pos = self._parent_node.calculate_socket_position(position_index,
+                                                                 position)
+        self.socket_graphics.setPos(*socket_pos)
