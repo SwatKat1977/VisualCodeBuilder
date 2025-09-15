@@ -35,8 +35,8 @@ class Node:
 
         self._socket_spacing = 30
 
-        self._inputs: list = []
-        self._outputs: list = []
+        self.inputs: list = []
+        self.outputs: list = []
 
         if inputs is not None:
             input_idx = 0
@@ -45,7 +45,7 @@ class Node:
                                         position_index=input_idx,
                                         position=SocketPosition.LEFT_TOP)
                 input_idx += 1
-                self._inputs.append(new_socket)
+                self.inputs.append(new_socket)
 
         if outputs is not None:
             output_idx = 0
@@ -53,7 +53,14 @@ class Node:
                 new_socket = NodeSocket(parent_node=self,
                                         position_index=output_idx,
                                         position=SocketPosition.RIGHT_TOP)
-                self._outputs.append(new_socket)
+                self.outputs.append(new_socket)
+
+    @property
+    def position(self):
+        return self.node_graphics.pos()
+
+    def set_position(self, x_position: int, y_position: int):
+        self.node_graphics.setPos(x_position, y_position)
 
     def calculate_socket_position(self, index : int, position : SocketPosition):
         """

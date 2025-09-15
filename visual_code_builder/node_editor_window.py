@@ -19,12 +19,12 @@ along with this program.If not, see < https://www.gnu.org/licenses/>.
 """
 import typing
 from PySide6 import QtCore
-from PySide6 import QtGui
 from PySide6 import QtWidgets
 from scene import Scene
 from node import Node
+from node_connector import NodeConnector
+from node_connector_type import NodeConnectorType
 from node_editor_window_graphics_view import NodeEditorWindowGraphicsView
-from node_socket import NodeSocket
 
 
 class NodeEditorWindow(QtWidgets.QWidget):
@@ -72,10 +72,7 @@ class NodeEditorWindow(QtWidgets.QWidget):
         # Create graphics scene
         self.scene = Scene()
 
-        node_1 = Node(self.scene,
-                      "Node #1",
-                      inputs=[1, 1, 1],
-                      outputs=[1])
+        self.add_nodes()
 
         # Create graphics view
         self.view = NodeEditorWindowGraphicsView(self.scene.graphics_scene, self)
@@ -84,34 +81,30 @@ class NodeEditorWindow(QtWidgets.QWidget):
         self.setWindowTitle("Node Editor")
         self.show()
 
-        # self.add_test_contents()
+    def add_nodes(self):
+        node_1 = Node(self.scene,
+                      "Node #1",
+                      inputs=[1, 1, 1],
+                      outputs=[1])
+        node_1.set_position(-350, -250)
+        node_2 = Node(self.scene,
+                      "Node #2",
+                      inputs=[1, 1, 1],
+                      outputs=[1])
+        node_2.set_position(-75, 0)
+        node_3 = Node(self.scene,
+                      "Node #3",
+                      inputs=[1, 1, 1],
+                      outputs=[1])
+        node_3.set_position(200, -150)
 
-    def add_test_contents(self):
-        green_brush = QtGui.QBrush(QtCore.Qt.GlobalColor.green)
-        outline_pen = QtGui.QPen(QtCore.Qt.GlobalColor.black)
-        outline_pen.setWidth(2)
-
-        rect = self.graphics_scene.addRect(-100, -100, 80, 100, outline_pen, green_brush)
-        rect.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable)
-
-        text = self.graphics_scene.addText("Movable tests string", QtGui.QFont("Ubuntu"))
-        text.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable)
-        text.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable)
-        text.setDefaultTextColor(QtGui.QColor.fromRgbF(1.0, 1.0, 1.0))
-
-        widget_1 = QtWidgets.QPushButton("Push me")
-        proxy_1 = self.graphics_scene.addWidget(widget_1)
-        proxy_1.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable)
-        proxy_1.setPos(0, 30)
-
-        widget_2 = QtWidgets.QTextEdit()
-        proxy_2 = self.graphics_scene.addWidget(widget_2)
-        proxy_2.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable)
-        proxy_2.setPos(-400, -400)
-
-        line = self.graphics_scene.addLine(-200, -200, 400, -100, outline_pen)
-        line.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable)
-        line.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable)
+        conn_1 = NodeConnector(self.scene,
+                               node_1.outputs[0],
+                               node_2.inputs[0])
+        conn_2 = NodeConnector(self.scene,
+                               node_2.outputs[0],
+                               node_3.inputs[0],
+                               type=NodeConnectorType.BEZIER)
 
     def _load_style_sheet(self, stylesheet_file: str):
         print(f"Loading node stylesheet '{stylesheet_file}")
