@@ -53,6 +53,7 @@ class Node:
                 new_socket = NodeSocket(parent_node=self,
                                         position_index=output_idx,
                                         position=SocketPosition.RIGHT_TOP)
+                output_idx += 1
                 self.outputs.append(new_socket)
 
     @property
