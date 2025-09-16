@@ -103,7 +103,7 @@ class NodeEditorWindow(QtWidgets.QWidget):
                                node_2.inputs[0])
         conn_2 = NodeConnector(self.scene,
                                node_2.outputs[0],
-                               node_3.inputs[0],
+                               node_3.inputs[2],
                                connector_type=NodeConnectorType.BEZIER)
 
     def _load_style_sheet(self, stylesheet_file: str):

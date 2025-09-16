@@ -46,6 +46,10 @@ class NodeSocket:
 
         self._connector = None
 
+    @property
+    def parent_node(self):
+        return self._parent_node
+
     def get_socket_position(self):
         return self._parent_node.calculate_socket_position(
             self._position_index, self._position)

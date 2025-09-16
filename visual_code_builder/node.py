@@ -40,7 +40,7 @@ class Node:
 
         if inputs is not None:
             input_idx = 0
-            for socket in inputs:
+            for _socket in inputs:
                 new_socket = NodeSocket(parent_node=self,
                                         position_index=input_idx,
                                         position=SocketPosition.LEFT_BOTTOM)
@@ -49,7 +49,7 @@ class Node:
 
         if outputs is not None:
             output_idx = 0
-            for socket in outputs:
+            for _socket in outputs:
                 new_socket = NodeSocket(parent_node=self,
                                         position_index=output_idx,
                                         position=SocketPosition.RIGHT_TOP)
@@ -86,4 +86,4 @@ class Node:
                      self.node_graphics.edge_roundness + index *
                      self._socket_spacing)
 
-        return x_pos, y_pos
+        return [x_pos, y_pos]

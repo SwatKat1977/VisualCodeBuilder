@@ -41,11 +41,18 @@ class NodeConnector:
         self.scene.graphics_scene.addItem(self.graphics)
 
     def update_positions(self):
-        self.graphics.set_source(*self.start_socket.get_socket_position())
+        source_position = self.start_socket.get_socket_position()
+        source_position[0] += self.start_socket.parent_node.node_graphics.pos().x()
+        source_position[1] += self.start_socket.parent_node.node_graphics.pos().y()
+
+        self.graphics.set_source(*source_position)
 
         if self.end_socket is not None:
-            self.graphics.set_destination(
-                *self.end_socket.get_socket_position())
+            end_position = self.end_socket.get_socket_position()
+            end_position[0] += self.end_socket.parent_node.node_graphics.pos().x()
+            end_position[1] += self.end_socket.parent_node.node_graphics.pos().y()
+
+            self.graphics.set_destination(*end_position)
 
         self.graphics.update()
 
