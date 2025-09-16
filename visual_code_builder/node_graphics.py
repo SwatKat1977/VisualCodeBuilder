@@ -76,6 +76,10 @@ class NodeGraphics(QtWidgets.QGraphicsItem):
     def initialise_sockets(self):
         pass
 
+    def mouseMoveEvent(self, event):
+        super().mouseMoveEvent(event)
+        self._node.update_connected_connectors()
+
     @property
     def title(self):
         return self._title

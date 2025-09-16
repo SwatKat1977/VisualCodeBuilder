@@ -87,3 +87,8 @@ class Node:
                      self._socket_spacing)
 
         return [x_pos, y_pos]
+
+    def update_connected_connectors(self):
+        for socket in self.inputs + self.outputs:
+            if socket.has_connector():
+                socket.connector.update_positions()

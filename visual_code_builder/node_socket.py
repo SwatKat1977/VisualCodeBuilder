@@ -56,3 +56,10 @@ class NodeSocket:
 
     def set_connector(self, connector=None):
         self._connector = connector
+
+    @property
+    def connector(self):
+        return self._connector
+
+    def has_connector(self) -> bool:
+        return self._connector is not None
