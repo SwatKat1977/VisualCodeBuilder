@@ -36,10 +36,19 @@ class NodeSocket:
                  position: SocketPosition = SocketPosition.LEFT_TOP):
         self._parent_node = parent_node
         self._position_index = position_index
-        self._position = SocketPosition.LEFT_TOP
+        self._position = position
 
         self.socket_graphics = NodeSocketGraphics(self._parent_node.node_graphics)
 
         socket_pos = self._parent_node.calculate_socket_position(position_index,
                                                                  position)
         self.socket_graphics.setPos(*socket_pos)
+
+        self._connector = None
+
+    def get_socket_position(self):
+        return self._parent_node.calculate_socket_position(
+            self._position_index, self._position)
+
+    def set_connector(self, connector=None):
+        self._connector = connector

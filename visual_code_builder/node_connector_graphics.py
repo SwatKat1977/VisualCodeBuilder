@@ -45,6 +45,12 @@ class NodeConnectorGraphics(QtWidgets.QGraphicsPathItem):
         # X, Y
         self._position_destination = [200, 100]
 
+    def set_source(self, source_x: int, source_y: int):
+        self._position_source = [source_x, source_y]
+
+    def set_destination(self, destination_x: int, destination_y: int):
+        self._position_destination = [destination_x, destination_y]
+
     def paint(self, painter, option, widget=None):
         self.update_path()
 

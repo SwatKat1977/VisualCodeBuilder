@@ -36,4 +36,31 @@ class NodeConnector:
             if connector_type == NodeConnectorType.DIRECT \
             else NodeConnectorGraphicsBezier(self)
 
+        self.update_positions()
+
         self.scene.graphics_scene.addItem(self.graphics)
+
+    def update_positions(self):
+        self.graphics.set_source(*self.start_socket.get_socket_position())
+
+        if self.end_socket is not None:
+            self.graphics.set_destination(
+                *self.end_socket.get_socket_position())
+
+        self.graphics.update()
+
+    def remove_from_sockets(self):
+        if self.start_socket.connector is not None:
+            self.start_socket.connector = None
+
+        if self.end_socket.connector is not None:
+            self.end_socket.connector = None
+
+        self.end_socket = None
+        self.start_socket = None
+
+    def remove(self):
+        self.remove_from_sockets()
+        self.scene.graphics_scene.removeItem(self.graphics)
+        self.graphics = None
+        self.scene.remove_connection(self)

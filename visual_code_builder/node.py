@@ -43,7 +43,7 @@ class Node:
             for socket in inputs:
                 new_socket = NodeSocket(parent_node=self,
                                         position_index=input_idx,
-                                        position=SocketPosition.LEFT_TOP)
+                                        position=SocketPosition.LEFT_BOTTOM)
                 input_idx += 1
                 self.inputs.append(new_socket)
 
@@ -73,12 +73,14 @@ class Node:
             self.node_graphics.width
 
         if position in (SocketPosition.LEFT_BOTTOM, SocketPosition.RIGHT_BOTTOM):
+            # Start from bottom
             y_pos = (self.node_graphics.height -
                      self.node_graphics.edge_roundness -
                      self.node_graphics.text_padding -
                      index * self._socket_spacing)
 
         else:
+            # Start from top
             y_pos = (self.node_graphics.title_height +
                      self.node_graphics.text_padding +
                      self.node_graphics.edge_roundness + index *
