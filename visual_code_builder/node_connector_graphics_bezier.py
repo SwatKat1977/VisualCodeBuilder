@@ -32,14 +32,13 @@ class NodeConnectorGraphicsBezier(NodeConnectorGraphics):
 
         # If destination is on the left-hand side, we need to make the
         # distance a minus.
-        if source[1] > destination[1]:
-            print("Swapping")
+        if source[0] > destination[0]:
             distance *= -1
 
         path.cubicTo(source[0] + distance,
                      source[1],
                      destination[0] - distance,
                      destination[1],
-                     destination[0],
-                     destination[1])
+                     self._position_destination[0],
+                     self._position_destination[1])
         self.setPath(path)

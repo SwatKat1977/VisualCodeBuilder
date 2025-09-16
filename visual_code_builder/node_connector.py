@@ -27,12 +27,47 @@ class NodeConnector:
                  scene,
                  start_socket,
                  end_socket,
-                 type: NodeConnectorType = NodeConnectorType.DIRECT):
+                 connector_type: NodeConnectorType = NodeConnectorType.DIRECT):
         self.scene = scene
         self.start_socket = start_socket
         self.end_socket = end_socket
 
-        self.connector_graphics = NodeConnectorGraphicsDirect(self) \
-            if type == NodeConnectorType.DIRECT else NodeConnectorGraphicsBezier(self)
+        self.graphics = NodeConnectorGraphicsDirect(self) \
+            if connector_type == NodeConnectorType.DIRECT \
+            else NodeConnectorGraphicsBezier(self)
 
-        self.scene.graphics_scene.addItem(self.connector_graphics)
+        self.update_positions()
+
+        self.scene.graphics_scene.addItem(self.graphics)
+
+    def update_positions(self):
+        source_position = self.start_socket.get_socket_position()
+        source_position[0] += self.start_socket.parent_node.node_graphics.pos().x()
+        source_position[1] += self.start_socket.parent_node.node_graphics.pos().y()
+
+        self.graphics.set_source(*source_position)
+
+        if self.end_socket is not None:
+            end_position = self.end_socket.get_socket_position()
+            end_position[0] += self.end_socket.parent_node.node_graphics.pos().x()
+            end_position[1] += self.end_socket.parent_node.node_graphics.pos().y()
+
+            self.graphics.set_destination(*end_position)
+
+        self.graphics.update()
+
+    def remove_from_sockets(self):
+        if self.start_socket.connector is not None:
+            self.start_socket.connector = None
+
+        if self.end_socket.connector is not None:
+            self.end_socket.connector = None
+
+        self.end_socket = None
+        self.start_socket = None
+
+    def remove(self):
+        self.remove_from_sockets()
+        self.scene.graphics_scene.removeItem(self.graphics)
+        self.graphics = None
+        self.scene.remove_connection(self)

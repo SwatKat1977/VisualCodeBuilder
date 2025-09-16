@@ -40,19 +40,20 @@ class Node:
 
         if inputs is not None:
             input_idx = 0
-            for socket in inputs:
+            for _socket in inputs:
                 new_socket = NodeSocket(parent_node=self,
                                         position_index=input_idx,
-                                        position=SocketPosition.LEFT_TOP)
+                                        position=SocketPosition.LEFT_BOTTOM)
                 input_idx += 1
                 self.inputs.append(new_socket)
 
         if outputs is not None:
             output_idx = 0
-            for socket in outputs:
+            for _socket in outputs:
                 new_socket = NodeSocket(parent_node=self,
                                         position_index=output_idx,
                                         position=SocketPosition.RIGHT_TOP)
+                output_idx += 1
                 self.outputs.append(new_socket)
 
     @property
@@ -62,7 +63,7 @@ class Node:
     def set_position(self, x_position: int, y_position: int):
         self.node_graphics.setPos(x_position, y_position)
 
-    def calculate_socket_position(self, index : int, position : SocketPosition):
+    def calculate_socket_position(self, index: int, position: SocketPosition):
         """
         Calculate and return the X,Y position for a socket.
         """
@@ -72,15 +73,17 @@ class Node:
             self.node_graphics.width
 
         if position in (SocketPosition.LEFT_BOTTOM, SocketPosition.RIGHT_BOTTOM):
+            # Start from bottom
             y_pos = (self.node_graphics.height -
                      self.node_graphics.edge_roundness -
                      self.node_graphics.text_padding -
                      index * self._socket_spacing)
 
         else:
+            # Start from top
             y_pos = (self.node_graphics.title_height +
                      self.node_graphics.text_padding +
                      self.node_graphics.edge_roundness + index *
                      self._socket_spacing)
 
-        return x_pos, y_pos
+        return [x_pos, y_pos]

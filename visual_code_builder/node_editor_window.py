@@ -84,17 +84,17 @@ class NodeEditorWindow(QtWidgets.QWidget):
     def add_nodes(self):
         node_1 = Node(self.scene,
                       "Node #1",
-                      inputs=[1, 1, 1],
+                      inputs=[1, 2, 3],
                       outputs=[1])
         node_1.set_position(-350, -250)
         node_2 = Node(self.scene,
                       "Node #2",
-                      inputs=[1, 1, 1],
+                      inputs=[1, 2, 3],
                       outputs=[1])
         node_2.set_position(-75, 0)
         node_3 = Node(self.scene,
                       "Node #3",
-                      inputs=[1, 1, 1],
+                      inputs=[1, 2, 3],
                       outputs=[1])
         node_3.set_position(200, -150)
 
@@ -103,8 +103,8 @@ class NodeEditorWindow(QtWidgets.QWidget):
                                node_2.inputs[0])
         conn_2 = NodeConnector(self.scene,
                                node_2.outputs[0],
-                               node_3.inputs[0],
-                               type=NodeConnectorType.BEZIER)
+                               node_3.inputs[2],
+                               connector_type=NodeConnectorType.BEZIER)
 
     def _load_style_sheet(self, stylesheet_file: str):
         print(f"Loading node stylesheet '{stylesheet_file}")

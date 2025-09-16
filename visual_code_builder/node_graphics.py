@@ -93,8 +93,8 @@ class NodeGraphics(QtWidgets.QGraphicsItem):
         return QtCore.QRectF(
             0,
             0,
-            2 * self.edge_roundness + self.width,
-            2 * self.edge_roundness + self.height
+            self.width,
+            self.height
         ).normalized()
 
     def paint(self, painter, _unused1, _unused2):
