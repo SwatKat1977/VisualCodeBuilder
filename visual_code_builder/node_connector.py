@@ -27,12 +27,13 @@ class NodeConnector:
                  scene,
                  start_socket,
                  end_socket,
-                 type: NodeConnectorType = NodeConnectorType.DIRECT):
+                 connector_type: NodeConnectorType = NodeConnectorType.DIRECT):
         self.scene = scene
         self.start_socket = start_socket
         self.end_socket = end_socket
 
-        self.connector_graphics = NodeConnectorGraphicsDirect(self) \
-            if type == NodeConnectorType.DIRECT else NodeConnectorGraphicsBezier(self)
+        self.graphics = NodeConnectorGraphicsDirect(self) \
+            if connector_type == NodeConnectorType.DIRECT \
+            else NodeConnectorGraphicsBezier(self)
 
-        self.scene.graphics_scene.addItem(self.connector_graphics)
+        self.scene.graphics_scene.addItem(self.graphics)
