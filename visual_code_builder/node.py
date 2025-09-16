@@ -40,19 +40,21 @@ class Node:
 
         if inputs is not None:
             input_idx = 0
-            for _socket in inputs:
+            for socket_type in inputs:
                 new_socket = NodeSocket(parent_node=self,
                                         position_index=input_idx,
-                                        position=SocketPosition.LEFT_BOTTOM)
+                                        position=SocketPosition.LEFT_BOTTOM,
+                                        socket_type=socket_type)
                 input_idx += 1
                 self.inputs.append(new_socket)
 
         if outputs is not None:
             output_idx = 0
-            for _socket in outputs:
+            for socket_type in outputs:
                 new_socket = NodeSocket(parent_node=self,
                                         position_index=output_idx,
-                                        position=SocketPosition.RIGHT_TOP)
+                                        position=SocketPosition.RIGHT_TOP,
+                                        socket_type=socket_type)
                 output_idx += 1
                 self.outputs.append(new_socket)
 

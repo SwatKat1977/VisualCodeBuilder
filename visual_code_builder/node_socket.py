@@ -33,12 +33,15 @@ class SocketPosition(Enum):
 class NodeSocket:
     def __init__(self, parent_node,
                  position_index=0,
-                 position: SocketPosition = SocketPosition.LEFT_TOP):
+                 position: SocketPosition = SocketPosition.LEFT_TOP,
+                 socket_type=1):
         self._parent_node = parent_node
         self._position_index = position_index
         self._position = position
+        self._socket_type = socket_type
 
-        self.socket_graphics = NodeSocketGraphics(self._parent_node.node_graphics)
+        self.socket_graphics = NodeSocketGraphics(
+            self._parent_node.node_graphics, self._socket_type)
 
         socket_pos = self._parent_node.calculate_socket_position(position_index,
                                                                  position)
