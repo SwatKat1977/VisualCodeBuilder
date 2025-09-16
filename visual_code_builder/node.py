@@ -63,7 +63,7 @@ class Node:
     def set_position(self, x_position: int, y_position: int):
         self.node_graphics.setPos(x_position, y_position)
 
-    def calculate_socket_position(self, index : int, position : SocketPosition):
+    def calculate_socket_position(self, index: int, position: SocketPosition):
         """
         Calculate and return the X,Y position for a socket.
         """
