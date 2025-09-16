@@ -32,6 +32,11 @@ class NodeConnector:
         self.start_socket = start_socket
         self.end_socket = end_socket
 
+        self.start_socket.set_connector(self)
+
+        if self.end_socket is not None:
+            self.end_socket.set_connector(self)
+
         self.graphics = NodeConnectorGraphicsDirect(self) \
             if connector_type == NodeConnectorType.DIRECT \
             else NodeConnectorGraphicsBezier(self)
