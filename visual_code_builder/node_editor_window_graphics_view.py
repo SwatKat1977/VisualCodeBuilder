@@ -26,6 +26,7 @@ from node_socket_graphics import NodeSocketGraphics
 
 class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
     CONNECTION_DRAG_START_THRESHOLD: int = 10
+    PRINT_DEBUG_INFO: bool = True
 
     def __init__(self, graphics_scene, parent=None):
         super().__init__(parent)
@@ -158,6 +159,23 @@ class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
     def _right_mouse_button_press(self, event):
         super().mousePressEvent(event)
 
+        item = self._get_clicked_item(event)
+
+        if self.PRINT_DEBUG_INFO:
+
+            if item is None:
+                print("[WindowView::_right_mouse_button_press] Scene:")
+                for node in self.graphics_scene.scene.nodes:
+                    print(f"    [NODE] {node.title} : {node}")
+
+                for connection in self.graphics_scene.scene.connections:
+                    print(f"    [CONNECTION] {connection}")
+
+            else:
+                print(f"[WindowView::_right_mouse_button_press] clicked item: {item}")
+
+
+
     def _left_mouse_button_release(self, event):
 
         clicked_item = self._get_clicked_item(event)
@@ -202,16 +220,16 @@ class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
         return distance_vector > threshold_squared
 
     def _connection_drag_start(self, item):
-        print("Starting to drag...")
-        print("assigning socket")
+        if self.PRINT_DEBUG_INFO: print("[WindowView::_connection_drag_start] Starting to drag connection")
+        if self.PRINT_DEBUG_INFO: print("[WindowView::_connection_drag_start] Assigning start socket")
 
     def _connection_drag_end(self, item) -> bool:
         self._current_state = NodeEditorState.VIEW_MODE
 
-        print("[::_connection_drag_end] Ending drag...")
+        if self.PRINT_DEBUG_INFO: print("[WindowView::_connection_drag_end] End dragging connection")
 
         if type(item) is NodeSocketGraphics:
-            print("Assigning end socket")
+            if self.PRINT_DEBUG_INFO: print("[WindowView::_connection_drag_end] Assigning end socket")
             return True
 
         return False
