@@ -57,8 +57,10 @@ class NodeConnector:
             end_position = self.end_socket.get_socket_position()
             end_position[0] += self.end_socket.parent_node.node_graphics.pos().x()
             end_position[1] += self.end_socket.parent_node.node_graphics.pos().y()
-
             self.graphics.set_destination(*end_position)
+
+        else:
+            self.graphics.set_destination(*source_position)
 
         self.graphics.update()
 

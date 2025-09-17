@@ -37,6 +37,7 @@ class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
 
         self._current_state = NodeEditorState.VIEW_MODE
         self._last_lmb_click_scene_position = None
+        self._connection_drag = None
 
         self.initialise()
 
@@ -123,6 +124,15 @@ class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
         # Set scene scale
         if not clamped or self._zoom_clamped is False:
             self.scale(zoom_factor, zoom_factor)
+
+    def mouseMoveEvent(self, event):
+        if self._current_state == NodeEditorState.CONNECTION_BEING_DRAGGED:
+            mouse_position = self.mapToScene(event.pos())
+            self._connection_drag.graphics.set_destination(
+                mouse_position.x(), mouse_position.y())
+            self._connection_drag.graphics.update()
+
+        super().mouseMoveEvent(event)
 
     def _middle_mouse_button_press(self, event):
         release_event = QtGui.QMouseEvent(
@@ -233,11 +243,11 @@ class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
         if self.PRINT_DEBUG_INFO: print("[WindowView::_connection_drag_start] Starting to drag connection")
         if self.PRINT_DEBUG_INFO: print(f"[WindowView::_connection_drag_start] Assigning start socket to {item.socket}")
 
-        self.connection_drag = NodeConnector(self.graphics_scene.scene,
-                                             item.socket,
-                                             None,
-                                             NodeConnectorType.BEZIER)
-        if self.PRINT_DEBUG_INFO: print(f"[WindowView::_connection_drag_start] New drag connection: {self.connection_drag}")
+        self._connection_drag = NodeConnector(self.graphics_scene.scene,
+                                              item.socket,
+                                              None,
+                                              NodeConnectorType.BEZIER)
+        if self.PRINT_DEBUG_INFO: print(f"[WindowView::_connection_drag_start] New drag connection: {self._connection_drag}")
 
     def _connection_drag_end(self, item) -> bool:
         self._current_state = NodeEditorState.VIEW_MODE
