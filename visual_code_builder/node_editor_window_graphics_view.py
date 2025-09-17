@@ -252,10 +252,18 @@ class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
     def _connection_drag_end(self, item) -> bool:
         self._current_state = NodeEditorState.VIEW_MODE
 
-        if self.PRINT_DEBUG_INFO: print("[WindowView::_connection_drag_end] End dragging connection")
-
         if type(item) is NodeSocketGraphics:
             if self.PRINT_DEBUG_INFO: print("[WindowView::_connection_drag_end] Assigning end socket")
+            self._connection_drag.end_socket = item.socket
+            self._connection_drag.start_socket.set_connector(self._connection_drag)
+            self._connection_drag.end_socket.set_connector(self._connection_drag)
+            if self.PRINT_DEBUG_INFO: print("[WindowView::_connection_drag_end] Assigned start and end socket")
+            self._connection_drag.update_positions()
             return True
+
+        if self.PRINT_DEBUG_INFO: print("[WindowView::_connection_drag_end] End dragging connection")
+        self._connection_drag.remove()
+        self._connection_drag = None
+        if self.PRINT_DEBUG_INFO: print("[WindowView::_connection_drag_end] Complete...")
 
         return False
