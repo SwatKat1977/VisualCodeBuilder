@@ -101,7 +101,7 @@ class NodeGraphics(QtWidgets.QGraphicsItem):
             self.height
         ).normalized()
 
-    def paint(self, painter, _unused1, _unused2):
+    def paint(self, painter, _unused1, _unused2=None):
         """
         Override the paint method for a rounded rectangle `Node`
         """

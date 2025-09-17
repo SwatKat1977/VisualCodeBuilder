@@ -51,7 +51,7 @@ class NodeConnectorGraphics(QtWidgets.QGraphicsPathItem):
     def set_destination(self, destination_x: int, destination_y: int):
         self._position_destination = [destination_x, destination_y]
 
-    def paint(self, painter, option, widget=None):
+    def paint(self, painter, _option, _widget=None):
         self.update_path()
 
         painter.setPen(self._pen_unselected if not self.isSelected() else
@@ -61,5 +61,5 @@ class NodeConnectorGraphics(QtWidgets.QGraphicsPathItem):
 
     def update_path(self):
         """ Calculate path """
-        raise NotImplemented(
+        raise NotImplementedError(
             "NodeConnectorGraphics::update_path() is not implemented")
