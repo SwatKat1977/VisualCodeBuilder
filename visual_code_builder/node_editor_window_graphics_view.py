@@ -20,13 +20,19 @@ along with this program.If not, see < https://www.gnu.org/licenses/>.
 from PySide6 import QtCore
 from PySide6 import QtGui
 from PySide6 import QtWidgets
+from node_editor_state import NodeEditorState
+from node_socket_graphics import NodeSocketGraphics
 
 
 class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
+    CONNECTION_DRAG_START_THRESHOLD: int = 10
 
     def __init__(self, graphics_scene, parent=None):
         super().__init__(parent)
         self.graphics_scene = graphics_scene
+
+        self._current_state = NodeEditorState.VIEW_MODE
+        self._last_lmb_click_scene_position = None
 
         self.initialise()
 
@@ -38,6 +44,7 @@ class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
         self._zoom_step = 1
         self._zoom_min_range_clamp = 0
         self._zoom_max_range_clamp = 10
+
 
     def initialise(self):
         # Set Anti-aliasing.
@@ -131,10 +138,36 @@ class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
         super().mousePressEvent(fake_event)
 
     def _left_mouse_button_press(self, event):
+
+        clicked_item = self._get_clicked_item(event)
+
+        self._last_lmb_click_scene_position = self.mapToScene(event.pos())
+
+        if type(clicked_item) is NodeSocketGraphics:
+            if self._current_state == NodeEditorState.VIEW_MODE:
+                self._current_state = NodeEditorState.CONNECTION_BEING_DRAGGED
+                self._connection_drag_start(clicked_item)
+                return
+
+        if self._current_state == NodeEditorState.CONNECTION_BEING_DRAGGED:
+            if self._connection_drag_end(clicked_item):
+                return
+
         super().mousePressEvent(event)
 
     def _right_mouse_button_press(self, event):
         super().mousePressEvent(event)
+
+    def _left_mouse_button_release(self, event):
+
+        clicked_item = self._get_clicked_item(event)
+
+        if self._current_state == NodeEditorState.CONNECTION_BEING_DRAGGED:
+            if self._is_distance_between_position_over_threshold(event):
+                if self._connection_drag_end(clicked_item):
+                    return
+
+        super().mouseReleaseEvent(event)
 
     def _middle_mouse_button_release(self, event):
         fake_event = QtGui.QMouseEvent(event.type(),
@@ -146,8 +179,39 @@ class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
         super().mouseReleaseEvent(fake_event)
         self.setDragMode(QtWidgets.QGraphicsView.NoDrag)
 
-    def _left_mouse_button_release(self, event):
-        super().mouseReleaseEvent(event)
-
     def _right_mouse_button_release(self, event):
         super().mouseReleaseEvent(event)
+
+    def _get_clicked_item(self, event):
+        position = event.pos()
+        object_clicked = self.itemAt(position)
+        return object_clicked
+
+    def _is_distance_between_position_over_threshold(self, event):
+        new_lmb_release_scene_position = self.mapToScene(event.pos())
+        move_distance = new_lmb_release_scene_position - \
+                        self._last_lmb_click_scene_position
+
+        distance_vector = move_distance.x() * move_distance.x() + \
+                          move_distance.y() * move_distance.y()
+        # Calculate threshold by squaring the constant for it. This is done
+        # instead of square rooting it as x or y can be 0 and therefore
+        # cause an exception.
+        threshold_squared = self.CONNECTION_DRAG_START_THRESHOLD * \
+                            self.CONNECTION_DRAG_START_THRESHOLD
+        return distance_vector > threshold_squared
+
+    def _connection_drag_start(self, item):
+        print("Starting to drag...")
+        print("assigning socket")
+
+    def _connection_drag_end(self, item) -> bool:
+        self._current_state = NodeEditorState.VIEW_MODE
+
+        print("[::_connection_drag_end] Ending drag...")
+
+        if type(item) is NodeSocketGraphics:
+            print("Assigning end socket")
+            return True
+
+        return False
