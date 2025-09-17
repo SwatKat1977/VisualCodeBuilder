@@ -23,6 +23,8 @@ from PySide6 import QtWidgets
 from node_editor_state import NodeEditorState
 from node_socket_graphics import NodeSocketGraphics
 from node_connector_graphics import NodeConnectorGraphics
+from node_connector import NodeConnector
+from node_connector_type import NodeConnectorType
 
 
 class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
@@ -184,8 +186,6 @@ class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
                 else:
                     print(f"[WindowView::_right_mouse_button_press] clicked item: {item}")
 
-
-
     def _left_mouse_button_release(self, event):
 
         clicked_item = self._get_clicked_item(event)
@@ -231,7 +231,13 @@ class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
 
     def _connection_drag_start(self, item):
         if self.PRINT_DEBUG_INFO: print("[WindowView::_connection_drag_start] Starting to drag connection")
-        if self.PRINT_DEBUG_INFO: print("[WindowView::_connection_drag_start] Assigning start socket")
+        if self.PRINT_DEBUG_INFO: print(f"[WindowView::_connection_drag_start] Assigning start socket to {item.socket}")
+
+        self.connection_drag = NodeConnector(self.graphics_scene.scene,
+                                             item.socket,
+                                             None,
+                                             NodeConnectorType.BEZIER)
+        if self.PRINT_DEBUG_INFO: print(f"[WindowView::_connection_drag_start] New drag connection: {self.connection_drag}")
 
     def _connection_drag_end(self, item) -> bool:
         self._current_state = NodeEditorState.VIEW_MODE

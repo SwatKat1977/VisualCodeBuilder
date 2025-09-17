@@ -33,8 +33,11 @@ class NodeConnectorGraphics(QtWidgets.QGraphicsPathItem):
         self._colour_selected = QtGui.QColor("#00ff00")
         self._pen_unselected = QtGui.QPen(self._colour_unselected)
         self._pen_selected = QtGui.QPen(self._colour_selected)
+        self._pen_dragging = QtGui.QPen(self._pen_unselected)
         self._pen_unselected.setWidthF(2.0)
         self._pen_selected.setWidthF(2.0)
+        self._pen_dragging.setWidthF(2.0)
+        self._pen_dragging.setStyle(QtGui.Qt.DashLine)
 
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable)
         self.setZValue(-1)
@@ -54,8 +57,12 @@ class NodeConnectorGraphics(QtWidgets.QGraphicsPathItem):
     def paint(self, painter, _option, _widget=None):
         self.update_path()
 
-        painter.setPen(self._pen_unselected if not self.isSelected() else
-                       self._pen_selected)
+        if self.connector.end_socket is None:
+            painter.setPen(self._pen_dragging)
+
+        else:
+            painter.setPen(self._pen_unselected if not self.isSelected() else
+                           self._pen_selected)
         painter.setBrush(QtGui.QBrush(QtCore.Qt.BrushStyle.NoBrush))
         painter.drawPath(self.path())
 
