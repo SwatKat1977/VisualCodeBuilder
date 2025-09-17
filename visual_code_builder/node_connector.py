@@ -44,6 +44,7 @@ class NodeConnector:
         self.update_positions()
 
         self.scene.graphics_scene.addItem(self.graphics)
+        self.scene.add_connection(self)
 
     def update_positions(self):
         source_position = self.start_socket.get_socket_position()
