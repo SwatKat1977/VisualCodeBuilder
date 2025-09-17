@@ -31,14 +31,15 @@ class NodeSocketGraphics(QtWidgets.QGraphicsItem):
     radius, background color, outline color, and stroke width.
     """
 
-    def __init__(self, parent=None, socket_type=1):
+    def __init__(self, socket, socket_type=1):
         """
         Initialize the NodeSocketGraphics item.
 
         Args:
             parent (QGraphicsItem, optional): The parent graphics item.
         """
-        super().__init__(parent)
+        self.socket = socket
+        super().__init__(socket.parent_node.node_graphics)
 
         self._colours = [
             QtGui.QColor("#FFFF7700"),

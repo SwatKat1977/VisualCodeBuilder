@@ -77,3 +77,6 @@ class NodeConnector:
         self.scene.graphics_scene.removeItem(self.graphics)
         self.graphics = None
         self.scene.remove_connection(self)
+
+    def __str__(self):
+        return f"{hex(id(self))[2:5]}..{hex(id(self))[-4:]}"

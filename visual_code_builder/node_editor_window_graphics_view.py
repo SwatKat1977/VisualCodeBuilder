@@ -22,6 +22,7 @@ from PySide6 import QtGui
 from PySide6 import QtWidgets
 from node_editor_state import NodeEditorState
 from node_socket_graphics import NodeSocketGraphics
+from node_connector_graphics import NodeConnectorGraphics
 
 
 class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
@@ -166,13 +167,22 @@ class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
             if item is None:
                 print("[WindowView::_right_mouse_button_press] Scene:")
                 for node in self.graphics_scene.scene.nodes:
-                    print(f"    [NODE] {node.title} : {node}")
+                    print(f"    [NODE] {node.title} : #{node}")
 
                 for connection in self.graphics_scene.scene.connections:
-                    print(f"    [CONNECTION] {connection}")
+                    print(f"    [CONNECTION] #{connection}")
 
             else:
-                print(f"[WindowView::_right_mouse_button_press] clicked item: {item}")
+                if isinstance(item, NodeConnectorGraphics):
+                    print(f"[WindowView::_right_mouse_button_press] connector {item.connector} "
+                          f"{item.connector.start_socket}<->{item.connector.end_socket}")
+
+                elif type(item) is NodeSocketGraphics:
+                    print(f"[WindowView::_right_mouse_button_press] socket {item.socket} "
+                          f"has connector {item.socket.connector}")
+
+                else:
+                    print(f"[WindowView::_right_mouse_button_press] clicked item: {item}")
 
 
 

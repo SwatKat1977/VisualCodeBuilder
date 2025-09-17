@@ -40,8 +40,7 @@ class NodeSocket:
         self._position = position
         self._socket_type = socket_type
 
-        self.socket_graphics = NodeSocketGraphics(
-            self._parent_node.node_graphics, self._socket_type)
+        self.socket_graphics = NodeSocketGraphics(self, self._socket_type)
 
         socket_pos = self._parent_node.calculate_socket_position(position_index,
                                                                  position)
@@ -52,6 +51,9 @@ class NodeSocket:
     @property
     def parent_node(self):
         return self._parent_node
+
+    def __str__(self):
+        return f"{hex(id(self))[2:5]}..{hex(id(self))[-4:]}"
 
     def get_socket_position(self):
         return self._parent_node.calculate_socket_position(

@@ -24,10 +24,10 @@ from PySide6.QtWidgets import QGraphicsItem
 
 
 class NodeConnectorGraphics(QtWidgets.QGraphicsPathItem):
-    def __init__(self, edge, parent=None):
+    def __init__(self, connector, parent=None):
         super().__init__(parent)
 
-        self.edge = edge
+        self.connector = connector
 
         self._colour_unselected = QtGui.QColor("#001000")
         self._colour_selected = QtGui.QColor("#00ff00")
