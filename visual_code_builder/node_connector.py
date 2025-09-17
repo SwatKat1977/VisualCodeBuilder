@@ -65,11 +65,11 @@ class NodeConnector:
         self.graphics.update()
 
     def remove_from_sockets(self):
-        if self.start_socket.connector is not None:
-            self.start_socket.connector = None
+        if self.start_socket is not None:
+            self.start_socket.set_connector()
 
-        if self.end_socket.connector is not None:
-            self.end_socket.connector = None
+        if self.end_socket is not None:
+            self.end_socket.set_connector()
 
         self.end_socket = None
         self.start_socket = None
