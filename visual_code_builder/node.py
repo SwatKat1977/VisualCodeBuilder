@@ -58,6 +58,9 @@ class Node:
                 output_idx += 1
                 self.outputs.append(new_socket)
 
+    def __str__(self):
+        return f"{hex(id(self))[2:5]}..{hex(id(self))[-4:]}"
+
     @property
     def position(self):
         return self.node_graphics.pos()
