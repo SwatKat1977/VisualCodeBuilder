@@ -52,6 +52,10 @@ class NodeSocket:
     def parent_node(self):
         return self._parent_node
 
+    @property
+    def position(self):
+        return self._position
+
     def __str__(self):
         return f"{hex(id(self))[2:5]}..{hex(id(self))[-4:]}"
 

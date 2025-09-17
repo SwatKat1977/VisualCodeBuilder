@@ -243,6 +243,9 @@ class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
         if self.PRINT_DEBUG_INFO: print("[WindowView::_connection_drag_start] Starting to drag connection")
         if self.PRINT_DEBUG_INFO: print(f"[WindowView::_connection_drag_start] Assigning start socket to {item.socket}")
 
+        self._previous_connection = item.socket.connector
+        self._last_start_socket = item.socket
+
         self._connection_drag = NodeConnector(self.graphics_scene.scene,
                                               item.socket,
                                               None,
@@ -254,16 +257,25 @@ class NodeEditorWindowGraphicsView(QtWidgets.QGraphicsView):
 
         if type(item) is NodeSocketGraphics:
             if self.PRINT_DEBUG_INFO: print("[WindowView::_connection_drag_end] Assigning end socket")
+
+            if self._previous_connection is not None:
+                self._previous_connection.remove()
+
+            if self.PRINT_DEBUG_INFO: print("Previous connection removed...")
+
+            self._connection_drag.start_socket = self._last_start_socket
             self._connection_drag.end_socket = item.socket
             self._connection_drag.start_socket.set_connector(self._connection_drag)
             self._connection_drag.end_socket.set_connector(self._connection_drag)
-            if self.PRINT_DEBUG_INFO: print("[WindowView::_connection_drag_end] Assigned start and end socket")
+            if self.PRINT_DEBUG_INFO: print("[WindowView::_connection_drag_end] reassigning start & end socket")
             self._connection_drag.update_positions()
             return True
 
         if self.PRINT_DEBUG_INFO: print("[WindowView::_connection_drag_end] End dragging connection")
         self._connection_drag.remove()
         self._connection_drag = None
+        if self._previous_connection is not None:
+            self._previous_connection.start_socket.set_connector(self._previous_connection)
         if self.PRINT_DEBUG_INFO: print("[WindowView::_connection_drag_end] Complete...")
 
         return False

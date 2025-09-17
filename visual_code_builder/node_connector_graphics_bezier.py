@@ -20,25 +20,35 @@ along with this program.If not, see < https://www.gnu.org/licenses/>.
 from PySide6 import QtCore
 from PySide6 import QtGui
 from node_connector_graphics import NodeConnectorGraphics
+from node_socket import SocketPosition
 
 
 class NodeConnectorGraphicsBezier(NodeConnectorGraphics):
     def update_path(self):
-        path = QtGui.QPainterPath(QtCore.QPointF(self._position_source[0],
-                                                 self._position_source[1]))
         source = self._position_source
         destination = self._position_destination
         distance = (destination[0] - source[0]) * 0.5
 
-        # If destination is on the left-hand side, we need to make the
-        # distance a minus.
-        if source[0] > destination[0]:
-            distance *= -1
+        cpx_source = +distance
+        cpx_destination = -distance
+        cpy_source = 0
+        cpy_destination = 0
 
-        path.cubicTo(source[0] + distance,
-                     source[1],
-                     destination[0] - distance,
-                     destination[1],
+        starting_socket_position = self.connector.start_socket.position
+        if (source[0] > destination[0] and starting_socket_position in (
+                SocketPosition.RIGHT_TOP, SocketPosition.RIGHT_BOTTOM)) or \
+            (source[0] < destination[0] and starting_socket_position in (
+                SocketPosition.LEFT_BOTTOM, SocketPosition.LEFT_TOP)):
+            cpx_destination *= -1
+            cpx_source *= -1
+
+        path = QtGui.QPainterPath(QtCore.QPointF(self._position_source[0],
+                                                 self._position_source[1]))
+        path.cubicTo(source[0] + cpx_source,
+                     source[1] + cpy_source,
+                     destination[0] + cpx_destination,
+                     destination[1] + cpy_destination,
                      self._position_destination[0],
                      self._position_destination[1])
+
         self.setPath(path)
